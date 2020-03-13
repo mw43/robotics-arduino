@@ -5,10 +5,10 @@
 Adafruit_TCS34725 colourSensor = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
 
 // FPGA PIN Assignments:
-int NEXTSTATE = 12;
-int RESESTATE = 13;
-int HANDSHAKE_SENT = 10;
-int HANDSHAKE_RECEIVED = 9;
+  int NEXTSTATE = 12;
+  int RESETSTATE = 13;
+  int HANDSHAKE_SENT = 10;
+  int HANDSHAKE_RECEIVED = 9;
   
 
 void setup() {
@@ -19,8 +19,19 @@ void setup() {
 }
 
 void loop() {
-  pulseFPGA(NEXTSATE);
-  delay(1000);
+  Serial.println("Initializing"); 
+  pulseFPGA(RESETSTATE);
+  
+  for(int i = 0; i < 4; i++)
+  {
+    
+    Serial.println(i);
+    pulseFPGA(NEXTSTATE);
+    delay(1000);
+  }
+  
+  Serial.println("Completed");
+  pulseFPGA(RESETSTATE);
 }
 
 void pulseFPGA(int pin) {
@@ -35,23 +46,21 @@ void pulseFPGA(int pin) {
   digitalWrite(HANDSHAKE_SENT, HIGH);
   
   digitalWrite(pin, HIGH);
-  delay(200);
+  delay(400);
   digitalWrite(pin, LOW);
-  delay(200);.
+  delay(400);
 
   Serial.println("Waiting on handshake confirmation...");
-  while((HANDSHAKE_CONFIRMED==false)||(HANDSHAKE_TIMEOUT <= 5))
+  while((HANDSHAKE_CONFIRMED==false))
+   {
+      HANDSHAKE_CONFIRMED = (digitalRead(HANDSHAKE_RECEIVED) == HIGH);
+   }
+   
+  if (HANDSHAKE_CONFIRMED)
   {
+    Serial.println("Handshake confirmed");
+    digitalWrite(HANDSHAKE_SENT, LOW);
     
-    HANDSHAKE_CONFIRMED = (digitalRead(HANDSHAKE_RECEIVED) == LOW);
-    delay(1000);
-    HANDSHAKE_TIMEOUT++;
   }
- 
-  if (HANDSHAKE_TIMEOUT >= 5)
-  {
-    Serial.println("Handshake timed-out. Did the FPGA get the data?");
-  }
-  digitalWrite(HANDSHAKE_SENT, LOW);
-  
+
 }
