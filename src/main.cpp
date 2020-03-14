@@ -1,11 +1,15 @@
 #include <Arduino.h>
+#include "MimasV2Controller.h"
+
+MimasV2Controller fpga = MimasV2Controller(12, 13, 10, 9);
 
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  fpga.next();
+
 }
 
 // Test commit between Desktop and Laptop.
