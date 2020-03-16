@@ -6,7 +6,19 @@
 //    > Moving blocks between different positions.
 //    > Colour: detection, comparison, and characterization.
 //    > Built-in data handshaking between FGPA and Arduino.
-DispenserController controller = DispenserController(12, 13, 11, 10, 9, 8, 20);
+
+DispenserController controller = DispenserController(12, 13, 11, 10, 9, 8, 3, 4, 5);
+
+// Pin Assignemnts are as follows:
+//   12 > NEXTSTATE
+//   13 > RESETSTATE
+//   11 > PISTON_CONTROL
+//   10 > HANDSHAKE_SENT
+//   9  > HANDSHAKE_RECEIVED
+//   8  > MAINTENANCE_TOGGLE
+//   3  > SERVO_MAINTENANCE_0
+//   4  > SERVO_MAINTENANCE_1
+//   5  > SERVO_MAINTENANCE_2
 
 void setup() {
   // Open the serial port.

@@ -108,47 +108,47 @@ void DispenserController::maintenanceServoTest(int position) {
 
   switch (position) {
     case 0:
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE_0, LOW);
+      digitalWrite(SERVO_MAINTENANCE_1, LOW);
+      digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case 1:
-      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE_0, HIGH);
+      digitalWrite(SERVO_MAINTENANCE_1, LOW);
+      digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case 2:
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE_0, LOW);
+      digitalWrite(SERVO_MAINTENANCE_1, HIGH);
+      digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case 3:
-      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
-      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE_0, HIGH);
+      digitalWrite(SERVO_MAINTENANCE_1, HIGH);
+      digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case 4:
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
+      digitalWrite(SERVO_MAINTENANCE_0, LOW);
+      digitalWrite(SERVO_MAINTENANCE_1, LOW);
+      digitalWrite(SERVO_MAINTENANCE_2, HIGH);
       break;
 
     default:
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
-      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE_0, LOW);
+      digitalWrite(SERVO_MAINTENANCE_1, LOW);
+      digitalWrite(SERVO_MAINTENANCE_2, LOW);
 
   }
 
   confirmHandshake();
 
-  digitalWrite(SERVO_MAINTENANCE[0], LOW);
-  digitalWrite(SERVO_MAINTENANCE[0], LOW);
-  digitalWrite(SERVO_MAINTENANCE[0], LOW);
+  digitalWrite(SERVO_MAINTENANCE_0, LOW);
+  digitalWrite(SERVO_MAINTENANCE_1, LOW);
+  digitalWrite(SERVO_MAINTENANCE_2, LOW);
 
   delay(1000);
 }

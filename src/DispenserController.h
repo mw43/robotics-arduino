@@ -18,15 +18,20 @@ class DispenserController {
 public:
 
   // Construstor takes pin assignments.
-  DispenserController(int n, int r, int p, int hs_s, int hs_r, int m):
-  NEXTSTATE(n), RESETSTATE(r), PISTON_CONTROL(p), HANDSHAKE_SENT(hs_s), HANDSHAKE_RECEIVED(hs_r), MAINTENANCE_TOGGLE(m)
+  DispenserController(int n, int r, int p, int hs_s, int hs_r, int m, int s0, int s1, int s2):
+  NEXTSTATE(n), RESETSTATE(r), PISTON_CONTROL(p), HANDSHAKE_SENT(hs_s), HANDSHAKE_RECEIVED(hs_r), MAINTENANCE_TOGGLE(m),
+  SERVO_MAINTENANCE_0(s0), SERVO_MAINTENANCE_1(s1), SERVO_MAINTENANCE_2(s2)
   {
     pinMode(NEXTSTATE, OUTPUT);
     pinMode(RESETSTATE, OUTPUT);
     pinMode(PISTON_CONTROL, OUTPUT);
     pinMode(HANDSHAKE_SENT, OUTPUT);
     pinMode(HANDSHAKE_RECEIVED, INPUT);
+    pinMode(SERVO_MAINTENANCE_0, OUTPUT);
+    pinMode(SERVO_MAINTENANCE_1, OUTPUT);
+    pinMode(SERVO_MAINTENANCE_2, OUTPUT);
     pinMode(MAINTENANCE_TOGGLE, OUTPUT);
+    
     stored_colours = 0;
 
   };
@@ -55,8 +60,10 @@ private:
   int PISTON_CONTROL;
   int HANDSHAKE_SENT;
   int HANDSHAKE_RECEIVED;
-  int SERVO_MAINTENANCE[3];
   int MAINTENANCE_TOGGLE;
+  int SERVO_MAINTENANCE_0;
+  int SERVO_MAINTENANCE_1;
+  int SERVO_MAINTENANCE_2;
 
 
   // Colour sensor used by the dispenser
