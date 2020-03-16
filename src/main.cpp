@@ -9,7 +9,7 @@
 
 DispenserController controller = DispenserController(12, 13, 11, 10, 9, 8, 3, 4, 5);
 
-// Pin Assignemnts are as follows:
+// Pin Assignments are as follows:
 //   12 > NEXTSTATE
 //   13 > RESETSTATE
 //   11 > PISTON_CONTROL

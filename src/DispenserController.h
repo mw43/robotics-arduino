@@ -31,7 +31,7 @@ public:
     pinMode(SERVO_MAINTENANCE_1, OUTPUT);
     pinMode(SERVO_MAINTENANCE_2, OUTPUT);
     pinMode(MAINTENANCE_TOGGLE, OUTPUT);
-    
+
     stored_colours = 0;
 
   };
@@ -81,14 +81,14 @@ private:
 
   // Default colours
   colour default_colours[8] = {
-    colour('R', 174.3, 52.1, 36.78), // RED
-    colour('G', 65.9, 125.0, 54.2),
-    colour('B', 51.2, 86.1, 112.8),
-    colour('L', 91.8, 113.7, 34.1),
-    colour('O', 154.0, 65.6, 28.6),
-    colour('N', 103.2, 89.1, 57.9),
-    colour('Y', 118.2, 94.5, 28.9),
-    colour('W', 88.5, 95.9, 57.1)
+    colour('R', 174.3, 52.1, 36.78), /*RED*/
+    colour('G', 65.9, 125.0, 54.2),  /*GREEN*/
+    colour('B', 51.2, 86.1, 112.8),  /*BLUE*/
+    colour('L', 91.8, 113.7, 34.1),  /*LIME*/
+    colour('O', 154.0, 65.6, 28.6),  /*ORANGE*/
+    colour('N', 103.2, 89.1, 57.9),  /*BLACK*/
+    colour('Y', 118.2, 94.5, 28.9),  /*YELLOW*/
+    colour('W', 88.5, 95.9, 57.1)    /*WHITE*/ 
   };
 
   // Colour error adjustment

@@ -1,14 +1,17 @@
 #include <DispenserController.h>
 
+// Begins the data handshaking, this is called any time data is written to the FPGA.
 void DispenserController::beginHandshake() {
   digitalWrite(HANDSHAKE_SENT, HIGH);
   Serial.println("Begin handshake...");
 }
 
+// Confirmation of data recieved, data confirmation should be sent AFTER the FPGA has changed state.
 void DispenserController::confirmHandshake() {
   while(digitalRead(HANDSHAKE_RECEIVED) == LOW) {}
 }
 
+// Moves the FPGA to the next state in user mode.
 void DispenserController::next() {
 
       pulsePin(NEXTSTATE);
@@ -16,11 +19,13 @@ void DispenserController::next() {
 
     }
 
+// Resets the FPGA to the initial state.
 void DispenserController::reset() {
   Serial.println("Reset...");
   pulsePin(RESETSTATE);
 }
 
+// Allows for characterization of custom colours - up to 20 can be stored.
 void DispenserController::beginCharacterization() {
   bool finishCharacterization = false;
   colour temp;
@@ -37,6 +42,11 @@ void DispenserController::beginCharacterization() {
 
 }
 
+// Compares two colour characterizations:
+//  - Current block under the sensor.
+//  - Target colour.
+// Allows for adjustable errors (default 5%.)
+// Will return true if colours match (within error.)
 bool DispenserController::compareColour(colour target) {
 
   float r,g,b;
@@ -50,6 +60,7 @@ bool DispenserController::compareColour(colour target) {
   );
 }
 
+// Returns the characterization of a specific colour from the CUSTOM set.
 colour DispenserController::lookupColour(char target) {
 
   for(int i = 0; i < 20; i++)
@@ -60,6 +71,7 @@ colour DispenserController::lookupColour(char target) {
     return null;
 }
 
+// Returns the characterization of a specific colour from the DEFAULT set.
 colour DispenserController::lookupDefaultColour(char target) {
   for(int i = 0; i < 8; i++)
   {
@@ -73,11 +85,13 @@ colour DispenserController::lookupDefaultColour(char target) {
 
 }
 
+// Dispenses current block.
 void DispenserController::dispense() {
   pulsePin(PISTON_CONTROL);
 
 }
 
+// Private method to pulse a specific pin on the FPGA
 void DispenserController::pulsePin(int p) {
   beginHandshake();
   digitalWrite(p, HIGH);
@@ -86,6 +100,7 @@ void DispenserController::pulsePin(int p) {
   delay(1000);
 }
 
+// Toggles between maintenance mode and user mode (default starts in user mode.)
 void DispenserController::maintenanceToggle() {
 
   if (!userMode) {
@@ -102,6 +117,7 @@ void DispenserController::maintenanceToggle() {
 
 }
 
+// Maintenance mode function tests servo positions with a 3-bit output.
 void DispenserController::maintenanceServoTest(int position) {
 
   beginHandshake();
@@ -153,12 +169,14 @@ void DispenserController::maintenanceServoTest(int position) {
   delay(1000);
 }
 
+// Returns the colour characterization of the current block.
 colour DispenserController::getColour() {
   colour current;
   colourSensor.getRGB(&current.r, &current.g, &current.b);
   return current;
 }
 
+// Checks to see if a colour ID exists in the DEFAULT set.
 bool DispenserController::colourExists(char c) {
   for (int i = 0; i < 8; i++)
   {
