@@ -7,8 +7,6 @@ void DispenserController::beginHandshake() {
 
 void DispenserController::confirmHandshake() {
   while(digitalRead(HANDSHAKE_RECEIVED) == LOW) {}
-
-
 }
 
 void DispenserController::next() {
@@ -43,7 +41,7 @@ bool DispenserController::compareColour(colour target) {
 
   float r,g,b;
   colourSensor.getRGB(&r, &g, &b);
-  
+
   return
   (
     ((errorLower*target.r) < r) && (r < (errorUpper*target.r)) &&
@@ -54,7 +52,7 @@ bool DispenserController::compareColour(colour target) {
 
 colour DispenserController::lookupColour(char target) {
 
-  for(int i = 0; i < max_colours; i++)
+  for(int i = 0; i < 20; i++)
   {
     if (colourList[i].name == target) {return colourList[i];}
   }
@@ -106,6 +104,53 @@ void DispenserController::maintenanceToggle() {
 
 void DispenserController::maintenanceServoTest(int position) {
 
+  beginHandshake();
+
+  switch (position) {
+    case 0:
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      break;
+
+    case 1:
+      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      break;
+
+    case 2:
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      break;
+
+    case 3:
+      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
+      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      break;
+
+    case 4:
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], HIGH);
+      break;
+
+    default:
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+      digitalWrite(SERVO_MAINTENANCE[0], LOW);
+
+  }
+
+  confirmHandshake();
+
+  digitalWrite(SERVO_MAINTENANCE[0], LOW);
+  digitalWrite(SERVO_MAINTENANCE[0], LOW);
+  digitalWrite(SERVO_MAINTENANCE[0], LOW);
+
+  delay(1000);
 }
 
 colour DispenserController::getColour() {

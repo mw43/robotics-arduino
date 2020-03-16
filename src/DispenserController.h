@@ -18,8 +18,8 @@ class DispenserController {
 public:
 
   // Construstor takes pin assignments.
-  DispenserController(int n, int r, int p, int hs_s, int hs_r, int m, int c):
-  NEXTSTATE(n), RESETSTATE(r), PISTON_CONTROL(p), HANDSHAKE_SENT(hs_s), HANDSHAKE_RECEIVED(hs_r), MAINTENANCE_TOGGLE(m), max_colours(c)
+  DispenserController(int n, int r, int p, int hs_s, int hs_r, int m):
+  NEXTSTATE(n), RESETSTATE(r), PISTON_CONTROL(p), HANDSHAKE_SENT(hs_s), HANDSHAKE_RECEIVED(hs_r), MAINTENANCE_TOGGLE(m)
   {
     pinMode(NEXTSTATE, OUTPUT);
     pinMode(RESETSTATE, OUTPUT);
@@ -27,10 +27,11 @@ public:
     pinMode(HANDSHAKE_SENT, OUTPUT);
     pinMode(HANDSHAKE_RECEIVED, INPUT);
     pinMode(MAINTENANCE_TOGGLE, OUTPUT);
-    colourList = new colour[max_colours]();
     stored_colours = 0;
 
   };
+
+  bool userMode = true;
 
   // Public functions for this dispenser class.
   void next();
@@ -44,8 +45,6 @@ public:
   colour lookupDefaultColour(char target);
   colour getColour();
   bool colourExists(char c);
-
-
 
   // Private member variables and functions.
 private:
@@ -63,9 +62,6 @@ private:
   // Colour sensor used by the dispenser
   Adafruit_TCS34725 colourSensor = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
 
-  // Toggles for various modes of operations.
-  bool userMode = true;
-  bool colourMode;
 
   // Private functions for data transfer.
   void beginHandshake();
@@ -73,9 +69,8 @@ private:
   void pulsePin(int p);
 
   // Stores a list of colours that have been characterized.
-  int max_colours;
   int stored_colours;
-  colour *colourList;
+  colour colourList[20];
 
   // Default colours
   colour default_colours[8] = {

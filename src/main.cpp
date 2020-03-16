@@ -1,34 +1,59 @@
 #include <Arduino.h>
 #include "DispenserController.h"
 
+// Control of the FPGA is done through a custom library: the DispenserController class.
+//  - This class defines an functions the dispenser may need such as:
+//    > Moving blocks between different positions.
+//    > Colour: detection, comparison, and characterization.
+//    > Built-in data handshaking between FGPA and Arduino.
 DispenserController controller = DispenserController(12, 13, 11, 10, 9, 8, 20);
 
 void setup() {
+  // Open the serial port.
   Serial.begin(9600);
-  
 }
 
 void loop() {
 
-  controller.reset();
-  char c;
-
-  while(!controller.colourExists(c)) {c = Serial.read();}
-
-  colour target = controller.lookupDefaultColour(c);
-
-  for(int i = 0; i < 5; i++)
+  // User Mode Operation
+  if (controller.userMode)
   {
-    if (controller.compareColour(target)) {
-      controller.dispense();
+    // Reset to the initial position of the dispenser.
+    controller.reset();
 
-    }
-    else{
+    // Colours have an assiged ID in the form of a char.
+    char c;
 
-      controller.next();
+    // Read the serial port until a valid colour ID is found.
+    while(!controller.colourExists(c)) {c = Serial.read();}
+
+    // Using the colour ID: lookup the characterization of a target colour.
+    //  - Returns a structure of type colour.
+    //  - Colours have a name, and float RGB values.
+    colour target = controller.lookupDefaultColour(c);
+
+    // Begin moving through dispenser positions to search for the target colour.
+    for(int i = 0; i < 5; i++)
+    {
+      // Check the block currently positioned under the sensor, with the target colour.
+      //  - An error margin of +/- 5% is allowed to account for slight changes in colour reading.
+      if (controller.compareColour(target))
+      {
+        // If the target colour is detected: begin dispensing process.
+        controller.dispense();
+      }
+      else
+      {
+        // Target colour is not in the current position, move to the next position.
+        controller.next();
+      }
 
     }
   }
 
+  // Maintenance Mode Operation
+  else
+  {
 
+  }
 }
