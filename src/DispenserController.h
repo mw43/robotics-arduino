@@ -1,9 +1,10 @@
 #ifndef DISPENSERCONTROLLER_H
 #define DISPENSERCONTROLLER_H
-#include <vector>
+
 
 #include <Arduino.h>
 #include "Adafruit_TCS34725.h"
+#include "Vector.h"
 
 struct colour {
   String name;
@@ -51,7 +52,7 @@ private:
   void beginHandshake();
   void confirmHandshake();
 
-  std::vector<colour> colorList;
+  Vector<colour> colorList;
 
   void pulsePin(int p);
 
