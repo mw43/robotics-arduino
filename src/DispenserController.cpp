@@ -19,23 +19,11 @@ void DispenserController::confirmHandshake() {
 }
 
 void DispenserController::next() {
-      beginHandshake();
-
-      digitalWrite(NEXTSTATE, HIGH);
-
-      confirmHandshake();
-
-      digitalWrite(NEXTSTATE, LOW);
+      pulsePin(NEXTSTATE);
     }
 
 void DispenserController::reset() {
-  beginHandshake();
-
-  digitalWrite(RESETSTATE, HIGH);
-
-  confirmHandshake();
-
-  digitalWrite(RESETSTATE, LOW);
+  pulsePin(RESETSTATE);
 }
 
 void DispenserController::beginCharacterization() {
@@ -65,6 +53,15 @@ colour DispenserController::lookupColour(String target) {
   }
 }
 
-void dispense() {
-  
+void DispenserController::dispense() {
+  pulsePin(PISTON_CONTROL);
+
+}
+
+void DispenserController::pulsePin(int p) {
+  beginHandshake();
+  digitalWrite(p, HIGH);
+  confirmHandshake();
+  digitalWrite(p, LOW);
+
 }

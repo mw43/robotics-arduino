@@ -53,6 +53,8 @@ private:
 
   std::vector<colour> colorList;
 
+  void pulsePin(int p);
+
 
 };
 

@@ -16,6 +16,7 @@ void loop() {
   if (controller.compareColour(controller.lookupColour(Serial.readString())))
   {
     controller.dispense();
+    controller.reset(); 
   }
 
 }
