@@ -40,21 +40,26 @@ void DispenserController::beginCharacterization() {
 }
 
 bool DispenserController::compareColour(colour target) {
+
   float r,g,b;
   colourSensor.getRGB(&r, &g, &b);
-  return ((target.r == r) && (target.g == g) && (target.b == b));
+  
+  return
+  (
+    ((errorLower*target.r) < r) && (r < (errorUpper*target.r)) &&
+    ((errorLower*target.g) < g) && (g < (errorUpper*target.g)) &&
+    ((errorLower*target.b) < b) && (b < (errorUpper*target.b))
+  );
 }
 
 colour DispenserController::lookupColour(char target) {
 
-if (maintenanceMode) {
   for(int i = 0; i < max_colours; i++)
   {
     if (colourList[i].name == target) {return colourList[i];}
   }
     colour null;
     return null;
-  }
 }
 
 colour DispenserController::lookupDefaultColour(char target) {
@@ -84,14 +89,16 @@ void DispenserController::pulsePin(int p) {
 }
 
 void DispenserController::maintenanceToggle() {
-  if (!maintenanceMode) {
+
+  if (!userMode) {
     Serial.println("Changing to: maintenance mode");
-    maintenanceMode = true;
+    userMode = true;
     digitalWrite(MAINTENANCE_TOGGLE, HIGH);
   }
-  else if (maintenanceMode) {
+
+  else if (userMode) {
     Serial.println("Changing to: user mode");
-    maintenanceMode = false;
+    userMode = false;
     digitalWrite(MAINTENANCE_TOGGLE, LOW);
   }
 

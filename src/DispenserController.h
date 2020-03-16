@@ -46,6 +46,7 @@ public:
   bool colourExists(char c);
 
 
+
   // Private member variables and functions.
 private:
 
@@ -63,7 +64,7 @@ private:
   Adafruit_TCS34725 colourSensor = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
 
   // Toggles for various modes of operations.
-  bool maintenanceMode = true;
+  bool userMode = true;
   bool colourMode;
 
   // Private functions for data transfer.
@@ -88,6 +89,9 @@ private:
     colour('W', 88.5, 95.9, 57.1)
   };
 
+  // Colour error adjustment
+  float errorUpper = 1.05;
+  float errorLower = 0.95;
 
 };
 
