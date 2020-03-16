@@ -34,7 +34,7 @@ void DispenserController::beginCharacterization() {
 
     colourList[stored_colours] = temp;
 
-    finishCharacterization = (Serial.read() == "finishCharacterization");
+    finishCharacterization = (Serial.read() == '5');
   }
 
 }
@@ -57,6 +57,19 @@ if (maintenanceMode) {
   }
 }
 
+colour DispenserController::lookupDefaultColour(char target) {
+  for(int i = 0; i < 8; i++)
+  {
+    if (default_colours[i].name == target)
+    {
+      return default_colours[i];
+    }
+  }
+    colour null;
+    return null;
+
+}
+
 void DispenserController::dispense() {
   pulsePin(PISTON_CONTROL);
 
@@ -67,6 +80,7 @@ void DispenserController::pulsePin(int p) {
   digitalWrite(p, HIGH);
   confirmHandshake();
   digitalWrite(p, LOW);
+  delay(1000);
 }
 
 void DispenserController::maintenanceToggle() {
@@ -81,4 +95,23 @@ void DispenserController::maintenanceToggle() {
     digitalWrite(MAINTENANCE_TOGGLE, LOW);
   }
 
+}
+
+void DispenserController::maintenanceServoTest(int position) {
+
+}
+
+colour DispenserController::getColour() {
+  colour current;
+  colourSensor.getRGB(&current.r, &current.g, &current.b);
+  return current;
+}
+
+bool DispenserController::colourExists(char c) {
+  for (int i = 0; i < 8; i++)
+  {
+    if (c == default_colours[i].name)
+    {return true;}
+  }
+  return false;
 }

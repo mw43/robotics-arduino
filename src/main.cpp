@@ -1,34 +1,46 @@
 #include <Arduino.h>
 #include "DispenserController.h"
 
-DispenserController controller = DispenserController(12, 13, 10, 9, 8, 20);
+DispenserController controller = DispenserController(12, 13, 11, 10, 9, 8, 20);
 
 void setup() {
   Serial.begin(9600);
-   controller.maintenanceToggle();
-   controller.maintenanceToggle();
-
-//  pinMode(8, OUTPUT);
-//  digitalWrite(8, HIGH);
+  controller.maintenanceToggle();
+  controller.maintenanceToggle();
 
 }
 
 void loop() {
 
-//  bool validCommand = false;
-  //char command;
-
-// Read serial port commands.
-//while(!validCommand) {
-  //command = (char)Serial.read();
-
-//
-
   controller.reset();
-  delay(1000);
-  for (int i = 0; i < 5; i++) {
-    controller.next();
-    delay(1000);
+
+char c = 'e';
+
+while(!controller.colourExists(c)){
+  c = Serial.read();
+}
+
+colour target = controller.lookupDefaultColour(c);
+
+
+
+  for(int i = 0; i < 5; i++)
+  {
+    colour t = controller.getColour();
+
+    Serial.print(t.r); Serial.print("  ");
+    Serial.print(t.g); Serial.print("  ");
+    Serial.print(t.b); Serial.println();
+
+    if (controller.compareColour(target)) {
+      controller.dispense();
+
+    }
+    else{
+
+      controller.next();
+
+    }
   }
 
 
