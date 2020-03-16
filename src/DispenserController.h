@@ -1,9 +1,17 @@
 #ifndef DISPENSERCONTROLLER_H
 #define DISPENSERCONTROLLER_H
+#include <vector>
 
 #include <Arduino.h>
+#include "Adafruit_TCS34725.h"
+
+struct colour {
+  String name;
+  float r, g, b;
+};
 
 class DispenserController {
+
 public:
 
   DispenserController(int n, int r, int hs_s, int hs_r):
@@ -17,6 +25,8 @@ public:
 
   void next();
   void reset();
+  void beginCharacterization();
+  bool compareColour(colour target);
 
 private:
   int NEXTSTATE;
@@ -26,9 +36,20 @@ private:
   int SERVO_MAINTENANCE[3];
   int MAINTENANCE_TOGGLE;
   int PISTON_CONTROL;
-  
+
+  float colourCharacterization[3];
+
+  Adafruit_TCS34725 colourSensor = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
+
+  bool maintenanceMode;
+  bool colourMode;
+
   void beginHandshake();
   void confirmHandshake();
+
+  std::vector<colour> colorList;
+
+
 };
 
 #endif

@@ -1,6 +1,4 @@
-
 #include <DispenserController.h>
-
 
 void DispenserController::beginHandshake() {
   digitalWrite(HANDSHAKE_SENT, HIGH);
@@ -31,3 +29,22 @@ void DispenserController::next() {
     }
 
 void DispenserController::reset() {}
+
+void DispenserController::beginCharacterization() {
+  bool finishCharacterization = false;
+  colour temp;
+
+  while(!finishCharacterization) {
+
+    temp.name = Serial.readString();
+    colourSensor.getRGB(&temp.r, &temp.g, &temp.b);
+    finishCharacterization = (Serial.readString() == "finishCharacterization");
+  }
+
+}
+
+bool DispenserController::compareColour(colour target) {
+  float r,g,b;
+  colourSensor.getRGB(&r, &g, &b);
+  return ((target.r == r) && (target.g == g) && (target.b == b));
+}
