@@ -28,14 +28,22 @@ void DispenserController::next() {
       digitalWrite(NEXTSTATE, LOW);
     }
 
-void DispenserController::reset() {}
+void DispenserController::reset() {
+  beginHandshake();
+
+  digitalWrite(RESETSTATE, HIGH);
+
+  confirmHandshake();
+
+  digitalWrite(RESETSTATE, LOW);
+}
 
 void DispenserController::beginCharacterization() {
   bool finishCharacterization = false;
   colour temp;
 
-  while(!finishCharacterization) {
-
+  while(!finishCharacterization)
+  {
     temp.name = Serial.readString();
     colourSensor.getRGB(&temp.r, &temp.g, &temp.b);
     finishCharacterization = (Serial.readString() == "finishCharacterization");
@@ -47,4 +55,16 @@ bool DispenserController::compareColour(colour target) {
   float r,g,b;
   colourSensor.getRGB(&r, &g, &b);
   return ((target.r == r) && (target.g == g) && (target.b == b));
+}
+
+colour DispenserController::lookupColour(String target) {
+
+  for(unsigned int i = 0; i < colorList.size(); i++)
+  {
+    if (colorList[i].name == target) {return colorList[i];}
+  }
+}
+
+void dispense() {
+  
 }

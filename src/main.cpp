@@ -12,6 +12,10 @@ void setup() {
 }
 
 void loop() {
-
+  controller.next();
+  if (controller.compareColour(controller.lookupColour(Serial.readString())))
+  {
+    controller.dispense();
+  }
 
 }

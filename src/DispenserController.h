@@ -25,8 +25,12 @@ public:
 
   void next();
   void reset();
+  void dispense();
   void beginCharacterization();
   bool compareColour(colour target);
+  colour lookupColour(String target);
+
+
 
 private:
   int NEXTSTATE;
