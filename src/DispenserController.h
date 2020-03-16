@@ -6,8 +6,10 @@
 
 // STRUCT - Defines a colour with RGB values and a name.
 struct colour {
-  String name;
+  char name;
   float r, g, b;
+  colour(){};
+  colour(char name, float r, float g, float b): name(name), r(r), g(g), b(b){};
 };
 
 // Control class for the dispenser.
@@ -24,7 +26,7 @@ public:
     pinMode(HANDSHAKE_SENT, OUTPUT);
     pinMode(HANDSHAKE_RECEIVED, INPUT);
     pinMode(MAINTENANCE_TOGGLE, OUTPUT);
-    colourList = new colour[max_colours];
+    colourList = new colour[max_colours]();
     stored_colours = 0;
 
   };
@@ -36,7 +38,7 @@ public:
   void maintenanceToggle();
   void beginCharacterization();
   bool compareColour(colour target);
-  colour lookupColour(String target);
+  colour lookupColour(char target);
 
 
   // Private member variables and functions.
@@ -67,6 +69,9 @@ private:
   int max_colours;
   int stored_colours;
   colour *colourList;
+
+  // Default colours
+  int default_colours
 
 
 };

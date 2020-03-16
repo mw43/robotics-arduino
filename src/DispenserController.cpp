@@ -12,6 +12,7 @@ void DispenserController::confirmHandshake() {
 }
 
 void DispenserController::next() {
+
       pulsePin(NEXTSTATE);
       delay(400);
 
@@ -28,12 +29,12 @@ void DispenserController::beginCharacterization() {
 
   while(!finishCharacterization)
   {
-    temp.name = Serial.readString();
+    temp.name = Serial.read();
     colourSensor.getRGB(&temp.r, &temp.g, &temp.b);
 
     colourList[stored_colours] = temp;
 
-    finishCharacterization = (Serial.readString() == "finishCharacterization");
+    finishCharacterization = (Serial.read() == "finishCharacterization");
   }
 
 }
@@ -44,16 +45,16 @@ bool DispenserController::compareColour(colour target) {
   return ((target.r == r) && (target.g == g) && (target.b == b));
 }
 
-colour DispenserController::lookupColour(String target) {
+colour DispenserController::lookupColour(char target) {
 
+if (maintenanceMode) {
   for(int i = 0; i < max_colours; i++)
   {
     if (colourList[i].name == target) {return colourList[i];}
   }
-
     colour null;
-    null.name = "null";
     return null;
+  }
 }
 
 void DispenserController::dispense() {
