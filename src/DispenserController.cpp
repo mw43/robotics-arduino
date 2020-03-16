@@ -2,27 +2,23 @@
 
 void DispenserController::beginHandshake() {
   digitalWrite(HANDSHAKE_SENT, HIGH);
+  Serial.println("Begin handshake...");
 }
 
 void DispenserController::confirmHandshake() {
-  bool HANDSHAKE_CONFIRMED;
+  while(digitalRead(HANDSHAKE_RECEIVED) == LOW) {}
 
-  while(HANDSHAKE_CONFIRMED==false)
-  {
-    HANDSHAKE_CONFIRMED = (digitalRead(HANDSHAKE_RECEIVED) == HIGH);
-  }
 
-  if (HANDSHAKE_CONFIRMED)
-  {
-    digitalWrite(HANDSHAKE_SENT, LOW);
-  }
 }
 
 void DispenserController::next() {
       pulsePin(NEXTSTATE);
+      delay(400);
+
     }
 
 void DispenserController::reset() {
+  Serial.println("Reset...");
   pulsePin(RESETSTATE);
 }
 
@@ -34,6 +30,9 @@ void DispenserController::beginCharacterization() {
   {
     temp.name = Serial.readString();
     colourSensor.getRGB(&temp.r, &temp.g, &temp.b);
+
+    colourList[stored_colours] = temp;
+
     finishCharacterization = (Serial.readString() == "finishCharacterization");
   }
 
@@ -47,10 +46,14 @@ bool DispenserController::compareColour(colour target) {
 
 colour DispenserController::lookupColour(String target) {
 
-  for(unsigned int i = 0; i < colorList.size(); i++)
+  for(int i = 0; i < max_colours; i++)
   {
-    if (colorList[i].name == target) {return colorList[i];}
+    if (colourList[i].name == target) {return colourList[i];}
   }
+
+    colour null;
+    null.name = "null";
+    return null;
 }
 
 void DispenserController::dispense() {
@@ -63,5 +66,18 @@ void DispenserController::pulsePin(int p) {
   digitalWrite(p, HIGH);
   confirmHandshake();
   digitalWrite(p, LOW);
+}
+
+void DispenserController::maintenanceToggle() {
+  if (!maintenanceMode) {
+    Serial.println("Changing to: maintenance mode");
+    maintenanceMode = true;
+    digitalWrite(MAINTENANCE_TOGGLE, HIGH);
+  }
+  else if (maintenanceMode) {
+    Serial.println("Changing to: user mode");
+    maintenanceMode = false;
+    digitalWrite(MAINTENANCE_TOGGLE, LOW);
+  }
 
 }
