@@ -128,36 +128,33 @@ void DispenserController::maintenanceServoTest(char position) {
 
   switch (position) {
     case '0':
-      Serial.println("$ Case 0");
       digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case '1':
-      Serial.println("$ Case 1");
-      digitalWrite(SERVO_MAINTENANCE_0, HIGH);
+      digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
-      digitalWrite(SERVO_MAINTENANCE_2, LOW);
+      digitalWrite(SERVO_MAINTENANCE_2, HIGH);
       break;
 
     case '2':
-      Serial.println("$ Case 2");
       digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, HIGH);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case '3':
-      digitalWrite(SERVO_MAINTENANCE_0, HIGH);
+      digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, HIGH);
-      digitalWrite(SERVO_MAINTENANCE_2, LOW);
+      digitalWrite(SERVO_MAINTENANCE_2, HIGH);
       break;
 
     case '4':
-      digitalWrite(SERVO_MAINTENANCE_0, LOW);
+      digitalWrite(SERVO_MAINTENANCE_0, HIGH);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
-      digitalWrite(SERVO_MAINTENANCE_2, HIGH);
+      digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
       case '6':
