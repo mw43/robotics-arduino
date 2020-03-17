@@ -44,12 +44,15 @@ public:
   void dispense();
   void maintenanceToggle();
   void beginCharacterization();
-  void maintenanceServoTest(int position);
+  void maintenanceServoTest(char position);
   bool compareColour(colour target);
   colour lookupColour(char target);
   colour lookupDefaultColour(char target);
   colour getColour();
   bool colourExists(char c);
+  bool validCommand(char c);
+  void processCommand(char c);
+  bool valiedMaintenanceCommand(char c);
 
   // Private member variables and functions.
 private:
@@ -88,13 +91,15 @@ private:
     colour('O', 154.0, 65.6, 28.6),  /*ORANGE*/
     colour('N', 103.2, 89.1, 57.9),  /*BLACK*/
     colour('Y', 118.2, 94.5, 28.9),  /*YELLOW*/
-    colour('W', 88.5, 95.9, 57.1)    /*WHITE*/ 
+    colour('W', 88.5, 95.9, 57.1)    /*WHITE*/
   };
 
   // Colour error adjustment
   float errorUpper = 1.05;
   float errorLower = 0.95;
 
+  char commands[2] = {'$', '%'};
+  char maintenanceCommands[7] = {'0', '1', '2', '3', '4', '6', '7'};
 };
 
 #endif

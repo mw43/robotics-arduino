@@ -118,36 +118,36 @@ void DispenserController::maintenanceToggle() {
 }
 
 // Maintenance mode function tests servo positions with a 3-bit output.
-void DispenserController::maintenanceServoTest(int position) {
+void DispenserController::maintenanceServoTest(char position) {
 
   beginHandshake();
 
   switch (position) {
-    case 0:
+    case '0':
       digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
-    case 1:
+    case '1':
       digitalWrite(SERVO_MAINTENANCE_0, HIGH);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
-    case 2:
+    case '2':
       digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, HIGH);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
-    case 3:
+    case '3':
       digitalWrite(SERVO_MAINTENANCE_0, HIGH);
       digitalWrite(SERVO_MAINTENANCE_1, HIGH);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
-    case 4:
+    case '4':
       digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
       digitalWrite(SERVO_MAINTENANCE_2, HIGH);
@@ -184,4 +184,33 @@ bool DispenserController::colourExists(char c) {
     {return true;}
   }
   return false;
+}
+
+bool DispenserController::validCommand(char c) {
+  for (int i = 0; i < 2; i++)
+  {
+    if (c == commands[i])
+    {return true;}
+  }
+  return false;
+}
+
+bool DispenserController::valiedMaintenanceCommand(char c) {
+  for (int i = 0; i < 7; i++)
+  {
+    if (c == maintenanceCommands[i])
+    {return true;}
+  }
+  return false;
+}
+
+void DispenserController::processCommand(char c) {
+  switch (c) {
+    case '$' : userMode = true;
+    break;
+
+    case '%' :userMode = false;
+    break;
+  }
+
 }

@@ -27,6 +27,11 @@ void setup() {
 
 void loop() {
 
+  char command;
+  while(!controller.validCommand(command)) {command = Serial.read();}
+  controller.processCommand(command);
+
+
   // User Mode Operation
   if (controller.userMode)
   {
@@ -66,6 +71,8 @@ void loop() {
   // Maintenance Mode Operation
   else
   {
-
+    char c;
+    while(!controller.valiedMaintenanceCommand(c)) {c = Serial.read();}
+    controller.maintenanceServoTest(c);
   }
 }
