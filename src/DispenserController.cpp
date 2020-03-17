@@ -3,12 +3,12 @@
 // Begins the data handshaking, this is called any time data is written to the FPGA.
 void DispenserController::beginHandshake() {
   digitalWrite(HANDSHAKE_SENT, HIGH);
-  Serial.println("Begin handshake...");
 }
 
 // Confirmation of data recieved, data confirmation should be sent AFTER the FPGA has changed state.
 void DispenserController::confirmHandshake() {
   while(digitalRead(HANDSHAKE_RECEIVED) == LOW) {}
+
 }
 
 // Moves the FPGA to the next state in user mode.
@@ -16,12 +16,11 @@ void DispenserController::next() {
 
       pulsePin(NEXTSTATE);
       delay(400);
-
     }
 
 // Resets the FPGA to the initial state.
 void DispenserController::reset() {
-  Serial.println("Reset...");
+
   pulsePin(RESETSTATE);
 }
 
@@ -52,12 +51,17 @@ bool DispenserController::compareColour(colour target) {
   float r,g,b;
   colourSensor.getRGB(&r, &g, &b);
 
+  Serial.print("R: "); Serial.print(r, DEC); Serial.print(" ");
+  Serial.print("G: "); Serial.print(g, DEC); Serial.print(" ");
+  Serial.print("B: "); Serial.print(b, DEC); Serial.print(" ");
+  Serial.println();
+
   return
-  (
     ((errorLower*target.r) < r) && (r < (errorUpper*target.r)) &&
     ((errorLower*target.g) < g) && (g < (errorUpper*target.g)) &&
-    ((errorLower*target.b) < b) && (b < (errorUpper*target.b))
-  );
+    ((errorLower*target.b) < b) && (b < (errorUpper*target.b));
+
+
 }
 
 // Returns the characterization of a specific colour from the CUSTOM set.
@@ -124,18 +128,21 @@ void DispenserController::maintenanceServoTest(char position) {
 
   switch (position) {
     case '0':
+      Serial.println("$ Case 0");
       digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case '1':
+      Serial.println("$ Case 1");
       digitalWrite(SERVO_MAINTENANCE_0, HIGH);
       digitalWrite(SERVO_MAINTENANCE_1, LOW);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
       break;
 
     case '2':
+      Serial.println("$ Case 2");
       digitalWrite(SERVO_MAINTENANCE_0, LOW);
       digitalWrite(SERVO_MAINTENANCE_1, HIGH);
       digitalWrite(SERVO_MAINTENANCE_2, LOW);
@@ -153,18 +160,18 @@ void DispenserController::maintenanceServoTest(char position) {
       digitalWrite(SERVO_MAINTENANCE_2, HIGH);
       break;
 
-    default:
-      digitalWrite(SERVO_MAINTENANCE_0, LOW);
-      digitalWrite(SERVO_MAINTENANCE_1, LOW);
-      digitalWrite(SERVO_MAINTENANCE_2, LOW);
+      case '6':
+        digitalWrite(MAINTENANCE_PISTON, HIGH);
+        break;
+
+      case '7':
+        digitalWrite(MAINTENANCE_PISTON, LOW);
+        break;
 
   }
 
   confirmHandshake();
 
-  digitalWrite(SERVO_MAINTENANCE_0, LOW);
-  digitalWrite(SERVO_MAINTENANCE_1, LOW);
-  digitalWrite(SERVO_MAINTENANCE_2, LOW);
 
   delay(1000);
 }
@@ -176,41 +183,28 @@ colour DispenserController::getColour() {
   return current;
 }
 
-// Checks to see if a colour ID exists in the DEFAULT set.
-bool DispenserController::colourExists(char c) {
+
+bool DispenserController::validCommand(char c) {
+  for (int i = 0; i < 7; i++)
+  {
+    if (c == commands[i])
+    {
+      userMode = false;
+      digitalWrite(MAINTENANCE_TOGGLE, LOW);
+      return true;
+    }
+
+  }
+
   for (int i = 0; i < 8; i++)
   {
     if (c == default_colours[i].name)
-    {return true;}
+    {
+      userMode = true;
+      digitalWrite(MAINTENANCE_TOGGLE, HIGH);
+      return true;
+    }
   }
+
   return false;
-}
-
-bool DispenserController::validCommand(char c) {
-  for (int i = 0; i < 2; i++)
-  {
-    if (c == commands[i])
-    {return true;}
-  }
-  return false;
-}
-
-bool DispenserController::valiedMaintenanceCommand(char c) {
-  for (int i = 0; i < 7; i++)
-  {
-    if (c == maintenanceCommands[i])
-    {return true;}
-  }
-  return false;
-}
-
-void DispenserController::processCommand(char c) {
-  switch (c) {
-    case '$' : userMode = true;
-    break;
-
-    case '%' :userMode = false;
-    break;
-  }
-
 }

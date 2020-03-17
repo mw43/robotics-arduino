@@ -18,9 +18,9 @@ class DispenserController {
 public:
 
   // Construstor takes pin assignments.
-  DispenserController(int n, int r, int p, int hs_s, int hs_r, int m, int s0, int s1, int s2):
+  DispenserController(int n, int r, int p, int hs_s, int hs_r, int m, int s0, int s1, int s2, int s4):
   NEXTSTATE(n), RESETSTATE(r), PISTON_CONTROL(p), HANDSHAKE_SENT(hs_s), HANDSHAKE_RECEIVED(hs_r), MAINTENANCE_TOGGLE(m),
-  SERVO_MAINTENANCE_0(s0), SERVO_MAINTENANCE_1(s1), SERVO_MAINTENANCE_2(s2)
+  SERVO_MAINTENANCE_0(s0), SERVO_MAINTENANCE_1(s1), SERVO_MAINTENANCE_2(s2), MAINTENANCE_PISTON(s4)
   {
     pinMode(NEXTSTATE, OUTPUT);
     pinMode(RESETSTATE, OUTPUT);
@@ -31,6 +31,7 @@ public:
     pinMode(SERVO_MAINTENANCE_1, OUTPUT);
     pinMode(SERVO_MAINTENANCE_2, OUTPUT);
     pinMode(MAINTENANCE_TOGGLE, OUTPUT);
+    pinMode(MAINTENANCE_PISTON, OUTPUT);
 
     stored_colours = 0;
 
@@ -49,10 +50,8 @@ public:
   colour lookupColour(char target);
   colour lookupDefaultColour(char target);
   colour getColour();
-  bool colourExists(char c);
   bool validCommand(char c);
-  void processCommand(char c);
-  bool valiedMaintenanceCommand(char c);
+
 
   // Private member variables and functions.
 private:
@@ -67,6 +66,8 @@ private:
   int SERVO_MAINTENANCE_0;
   int SERVO_MAINTENANCE_1;
   int SERVO_MAINTENANCE_2;
+  int MAINTENANCE_PISTON;
+
 
 
   // Colour sensor used by the dispenser
@@ -85,21 +86,21 @@ private:
   // Default colours
   colour default_colours[8] = {
     colour('R', 174.3, 52.1, 36.78), /*RED*/
-    colour('G', 65.9, 125.0, 54.2),  /*GREEN*/
+    colour('G', 76.0, 118.0, 53.9),  /*GREEN*/
     colour('B', 51.2, 86.1, 112.8),  /*BLUE*/
     colour('L', 91.8, 113.7, 34.1),  /*LIME*/
     colour('O', 154.0, 65.6, 28.6),  /*ORANGE*/
     colour('N', 103.2, 89.1, 57.9),  /*BLACK*/
-    colour('Y', 118.2, 94.5, 28.9),  /*YELLOW*/
+    colour('Y', 121.2, 94.5, 32.4),  /*YELLOW*/
     colour('W', 88.5, 95.9, 57.1)    /*WHITE*/
   };
 
   // Colour error adjustment
-  float errorUpper = 1.05;
-  float errorLower = 0.95;
+  float errorUpper = 1.10;
+  float errorLower = 0.90;
 
-  char commands[2] = {'$', '%'};
-  char maintenanceCommands[7] = {'0', '1', '2', '3', '4', '6', '7'};
+  char commands[7] = {'0', '1', '2', '3', '4', '6', '7'};
+
 };
 
 #endif
